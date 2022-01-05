@@ -1,12 +1,12 @@
-import { GlobalStyle } from './styles/GlobalStyle'
+import{ Suspense } from 'react';
 
-import { Greetings } from './components/Greetings'
-
+import RenderRouter from './routers';
 export function App() {
   return (
-    <>
-      <GlobalStyle />
-      <Greetings />
-    </>
+    <div>
+      <Suspense fallback={<div>...</div>}>
+        <RenderRouter />
+      </Suspense>
+    </div>
   )
 }

@@ -1,3 +1,19 @@
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+
+const isDev = process.env.NODE_ENV !== 'production'
+
+const getCssLoaders = importLoaders => [
+  isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+  {
+    loader: 'css-loader',
+    options: {
+      modules: false,
+      sourceMap: isDev,
+      importLoaders,
+    },
+  },
+]
+
 module.exports = [
   {
     test: /\.node$/,
@@ -17,8 +33,8 @@ module.exports = [
     test: /\.(js|ts|tsx)$/,
     exclude: /node_modules/,
     use: {
-      loader: 'babel-loader'
-    }
+      loader: 'babel-loader',
+    },
   },
   {
     test: /\.(png|jpe?g|gif)$/i,
@@ -26,5 +42,21 @@ module.exports = [
     options: {
       name: '[path][name].[ext]',
     },
-  }
+  },
+  {
+    test: /\.css$/,
+    use: getCssLoaders(0),
+  },
+  {
+    test: /\.scss$/,
+    use: [
+      ...getCssLoaders(1),
+      {
+        loader: 'sass-loader',
+        options: {
+          sourceMap: isDev,
+        },
+      },
+    ],
+  },
 ]
